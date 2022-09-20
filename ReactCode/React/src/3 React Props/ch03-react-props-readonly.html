@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>React Props - Readonly</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    div#id-div-react {
+        position: relative;
+        width: 460px;
+        height: auto;
+        border: 0px solid gray;
+        margin: 8px auto;
+        padding: 8px;
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-formlogin {
+        border: 1px solid gray;
+    }
+</style>
+<body>
+<!-- 添加文档主体内容 -->
+<div id='id-div-react'></div>
+<script type="text/babel">
+    // TODO: get div
+    var divReact = document.getElementById('id-div-react');
+    // TODO: function components
+    function FormTitle() {
+        return <h4>User Login</h4>;
+    }
+    function UserId(props) {
+        const userId = (
+            <p>User Id(*): <input type="text" value={props.userId} /></p>
+        );
+        return userId;
+    }
+    function UserName(props) {
+        const userName = (
+            <p>User Name: <input type="text" value={props.userName} /></p>
+        );
+        return userName;
+    }
+    function Password() {
+        const passwd = (
+            <p>Password(*): <input type="password" /></p>
+        );
+        return passwd;
+    }
+    function Submit() {
+        const submit = (
+            <p><button>Login</button></p>
+        );
+        return submit;
+    }
+    // TODO: composing components
+    function FormLogin() {
+        return (
+            <div id="id-div-formlogin">
+                <FormTitle />
+                <UserId userId="007" />
+                <UserName userName="King" />
+                <Password />
+                <Submit />
+            </div>
+        );
+    }
+    // TODO: define const
+    const formLogin = <FormLogin />;
+    // TODO: React JSX
+    const reactSpan = (
+        <span>
+            <h3>React Props - Readonly</h3>
+            {formLogin}
+        </span>
+    );
+    // TODO: React render
+    ReactDOM.render(reactSpan, divReact);
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this section for a production-ready setup with JSX:
+  https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+  In a larger project, you can use an integrated toolchain that includes JSX instead:
+  https://reactjs.org/docs/create-a-new-react-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  https://reactjs.org/docs/react-without-jsx.html
+-->
+</body>
+</html>

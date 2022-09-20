@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>React Form - React Form</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    div#id-div-react {
+        position: relative;
+        width: 400px;
+        height: auto;
+        border: 0px solid black;
+        margin: 8px auto;
+        padding: 8px;
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-react span {
+        margin: 8px auto;
+        padding: 8px;
+    }
+
+    div#id-div-react span h3 {
+        text-align: center;
+    }
+
+    div#id-div-react span form {
+        text-align: center;
+    }
+
+    div#id-div-react form label {
+        text-align: right;
+    }
+
+    div#id-div-react form input {
+        width: 96px;
+        text-align: center;
+    }
+
+    div#id-div-react form input[type='number'] {
+        width: 50px;
+        color: #333;
+    }
+</style>
+<body>
+<!-- 添加文档主体内容 -->
+<div id='id-div-react'></div>
+<script type="text/babel">
+    // TODO: get div
+    var divReact = document.getElementById('id-div-react');
+    // TODO: define ES6 Class Component
+    class FormComp extends React.Component {
+        // TODO: Component Constructor
+        constructor(props) {
+            super(props);
+            this.state = {
+                username: "",
+                age: "18",
+                gender: "male"
+            };
+            this.handleInputChange = this.handleInputChange.bind(this);
+            this.handleSelChange = this.handleSelChange.bind(this);
+        }
+        // TODO: handle event
+        handleInputChange(event) {
+            const target = event.target;
+            const value = target.type === 'checkbox' ? target.checked : target.value;
+            const name = target.name;
+            this.setState({
+                [name]: value
+            });
+            //console.log(name + " : " + value);
+        }
+        handleSelChange(event) {
+            let gender = event.target.value;
+            this.setState({
+                gender: gender
+            });
+            //console.log("selected '" + gender + "'.");
+        }
+        // TODO: render form
+        render() {
+            return (
+                <form action="server.py" method="GET">
+                    <label>
+                        Username:&nbsp;&nbsp;
+                        <input
+                            name="username"
+                            type="text"
+                            value={this.state.username}
+                            onChange={this.handleInputChange} />
+                    </label><br/>
+                    <label>
+                        Age:&nbsp;&nbsp;
+                        <input
+                            name="age"
+                            type="number"
+                            value={this.state.age}
+                            onChange={this.handleInputChange} />
+                    </label><br/>
+                    <label>
+                        Gender:&nbsp;&nbsp;
+                        <select name="gender" value={this.state.gender} onChange={this.handleSelChange}>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </label><br/><br/>
+                    <input type="submit" value="提交" />
+                </form>
+            );
+        }
+    }
+    // TODO: React JSX
+    const reactSpan = (
+        <span>
+            <h3>React Form - Submit to Server</h3>
+            <FormComp />
+        </span>
+    );
+    // TODO: React render
+    ReactDOM.render(reactSpan, divReact);
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this section for a production-ready setup with JSX:
+  https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+  In a larger project, you can use an integrated toolchain that includes JSX instead:
+  https://reactjs.org/docs/create-a-new-react-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  https://reactjs.org/docs/react-without-jsx.html
+-->
+</body>
+</html>

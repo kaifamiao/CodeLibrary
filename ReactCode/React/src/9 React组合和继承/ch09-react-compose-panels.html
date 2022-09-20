@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>React Form - React Compose</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    div#id-div-react {
+        position: relative;
+        width: 400px;
+        height: auto;
+        border: 0px solid black;
+        margin: 8px auto;
+        padding: 8px;
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-react .main-panel-header {
+        margin: 2px auto;
+        padding: 2px;
+        width: 100%;
+        height: 32px;
+        text-align: center;
+    }
+
+    div#id-div-react .main-panel-left {
+        float: left;
+        margin: 2px auto;
+        padding: 2px;
+        width: 33%;
+        height: auto;
+        text-align: center;
+    }
+
+    div#id-div-react .main-panel-right {
+        float: left;
+        margin: 2px auto;
+        padding: 2px;
+        width: 65%;
+        height: auto;
+        text-align: center;
+    }
+
+    div#id-div-react .css-header {
+        font-weight: bold;
+        border: 1px solid gray;
+        background-color: #aaa;
+    }
+
+    div#id-div-react .css-left {
+        height: 96px;
+        border: 1px solid gray;
+        background-color: #ccc;
+    }
+
+    div#id-div-react .css-right {
+        height: 96px;
+        border: 1px solid gray;
+        background-color: #eee;
+    }
+</style>
+<body>
+<!-- 添加文档主体内容 -->
+<div id='id-div-react'></div>
+<script type="text/babel">
+    // TODO: get div
+    var divReact = document.getElementById('id-div-react');
+    // TODO: function components
+    function HeaderPanel() {
+        return <div className="css-header">Header Panel</div>;
+    }
+    function LeftPanel() {
+        return <div className="css-left">Left Panel</div>;
+    }
+    function RightPanel() {
+        return <div className="css-right">Right Panel</div>;
+    }
+    function MainPanel(props) {
+        return (
+            <div className="main-panel">
+                <div className="main-panel-header">
+                    {props.header}
+                </div>
+                <div className="main-panel-left">
+                    {props.left}
+                </div>
+                <div className="main-panel-right">
+                    {props.right}
+                </div>
+            </div>
+        );
+    }
+    // TODO: App components
+    function App() {
+        return (
+            <MainPanel
+                header={
+                    <HeaderPanel />
+                }
+                left={
+                    <LeftPanel />
+                }
+                right={
+                    <RightPanel />
+                } />
+        );
+    }
+    // TODO: React render
+    ReactDOM.render(
+        <App />,
+        divReact
+    );
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this section for a production-ready setup with JSX:
+  https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+  In a larger project, you can use an integrated toolchain that includes JSX instead:
+  https://reactjs.org/docs/create-a-new-react-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  https://reactjs.org/docs/react-without-jsx.html
+-->
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>React Event - Water Temperature</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    div#id-div-react {
+        position: relative;
+        width: 400px;
+        height: auto;
+        border: 0px solid black;
+        margin: 8px auto;
+        padding: 8px;
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-react span {
+        margin: 8px auto;
+        padding: 8px;
+    }
+
+    div#id-div-react span h3 {
+        text-align: center;
+    }
+
+    div#id-div-react span input {
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-react span p {
+        font: normal 20px/2.0em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+</style>
+<body>
+<!-- 添加文档主体内容 -->
+<div id='id-div-react'></div>
+<script type="text/babel">
+    // TODO: define water temperature func Component
+    var divReact = document.getElementById('id-div-react');
+    // TODO: define temperature type
+    const tempType = {
+        c: 'Celsius',
+        f: 'Fahrenheit'
+    };
+    // TODO: convert temperature
+    function toCelsius(fahrenheit) {
+        return Math.round((fahrenheit - 32) * 5 / 9);
+    }
+    function toFahrenheit(celsius) {
+        return Math.round((celsius * 9 / 5) + 32);
+    }
+    function toConvert(temperature, convert) {
+        if (Number.isNaN(temperature)) {
+            return '';
+        }
+        return convert(temperature).toString();
+    }
+    // TODO: define func Component
+    function WaterTempLevel(props) {
+        if(props.type === 'c') {
+            return <WaterTempCelsiusLevel wlevel={props.wlevel} />;
+        } else if(props.type === 'f') {
+            return <WaterTempFahrenheitLevel wlevel={props.wlevel} />;
+        } else {}
+    }
+    function WaterTempCelsiusLevel(props) {
+        if (props.wlevel <= 0) {
+            return <p>This is ice water.</p>;
+        } else if((props.wlevel > 0) && (props.wlevel <= 20)) {
+            return <p>This is cold water.</p>;
+        } else if((props.wlevel > 20) && (props.wlevel <= 38)) {
+            return <p>This is warm water.</p>;
+        } else if((props.wlevel > 38) && (props.wlevel < 100)) {
+            return <p>This is hot water.</p>;
+        } else if(props.wlevel >= 100) {
+            return <p>This is boiling water.</p>;
+        } else {
+            return <p>This is ... water.</p>;
+        }
+    }
+    function WaterTempFahrenheitLevel(props) {
+        if (props.wlevel <= 32) {
+            return <p>This is ice water.</p>;
+        } else if((props.wlevel > 32) && (props.wlevel <= 68)) {
+            return <p>This is cold water.</p>;
+        } else if((props.wlevel > 68) && (props.wlevel <= 100)) {
+            return <p>This is warm water.</p>;
+        } else if((props.wlevel > 100) && (props.wlevel < 212)) {
+            return <p>This is hot water.</p>;
+        } else if(props.wlevel >= 212) {
+            return <p>This is boiling water.</p>;
+        } else {
+            return <p>This is ... water.</p>;
+        }
+    }
+    // TODO: define ES6 Class Component
+    class WaterTemperature extends React.Component {
+        // TODO: constructor
+        constructor(props) {
+            super(props);
+            this.handleTempChange = this.handleTempChange.bind(this);
+        }
+        // TODO: handle event
+        handleTempChange(e) {
+            this.props.onTemperatureChange(e.target.value);
+        }
+        // TODO: render
+        render() {
+            const temperature = this.props.temperature;
+            const type = this.props.type;
+            return (
+                <div>
+                    <span>
+                        <label>Enter temperature in {tempType[type]}:</label>
+                        <input
+                            value={temperature}
+                            onChange={this.handleTempChange} />
+                        <WaterTempLevel
+                            wlevel={temperature}
+                            type={type} />
+                    </span>
+                </div>
+            );
+        }
+    }
+    // TODO: define ES6 Class Component
+    class WaterTemperatureApp extends React.Component {
+        // TODO: constructor
+        // state - temperature, type
+        constructor(props) {
+            super(props);
+            this.state = {
+                temperature: '0',
+                type: 'c'
+            };
+            this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+            this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+        }
+        // TODO: handle event
+        handleCelsiusChange(temperature) {
+            this.setState({type: 'c', temperature});
+        }
+        handleFahrenheitChange(temperature) {
+            this.setState({type: 'f', temperature});
+        }
+        // TODO: render
+        render() {
+            const type = this.state.type;
+            const temperature = this.state.temperature;
+            const celsius = type === 'f' ? toConvert(temperature, toCelsius) : temperature;
+            const fahrenheit = type === 'c' ? toConvert(temperature, toFahrenheit) : temperature;
+            return (
+                <div>
+                    <WaterTemperature
+                        type="c"
+                        temperature={celsius}
+                        onTemperatureChange={this.handleCelsiusChange} />
+                    <WaterTemperature
+                        type="f"
+                        temperature={fahrenheit}
+                        onTemperatureChange={this.handleFahrenheitChange} />
+                </div>
+            );
+        }
+    }
+    // TODO: React JSX
+    const reactSpan = (
+        <span>
+            <h3>React State Enhance - Water Temperature</h3>
+            <WaterTemperatureApp />
+        </span>
+    );
+    // TODO: React render
+    ReactDOM.render(reactSpan, divReact);
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this section for a production-ready setup with JSX:
+  https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+  In a larger project, you can use an integrated toolchain that includes JSX instead:
+  https://reactjs.org/docs/create-a-new-react-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  https://reactjs.org/docs/react-without-jsx.html
+-->
+</body>
+</html>

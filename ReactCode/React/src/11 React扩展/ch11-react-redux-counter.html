@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>React Redux Demo</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    div#id-div-react {
+        position: relative;
+        width: 500px;
+        height: auto;
+        border: 0px solid black;
+        margin: 8px auto;
+        padding: 8px;
+        font: normal 16px/1.6em "Microsoft Yahei", arial, sans-serif;
+        text-align: center;
+    }
+
+    div#id-div-react span {
+        margin: 8px auto;
+        padding: 8px;
+    }
+
+    div#id-div-react span h3 {
+        text-align: center;
+    }
+</style>
+<body>
+<!-- 添加文档主体内容 -->
+<div id='id-div-react'>
+    <p>
+        Clicked: <span id="id-count">0</span> times.<br/><br/>
+        <button id="increment">+1</button>
+        <button id="decrement">-1</button>
+        <button id="incrementIfOdd">+1(当前times为奇数时)</button>
+        <button id="incrementAsync">+1(异步操作)</button>
+    </p>
+</div>
+<script type="text/babel">
+    // TODO: get div
+    var divReact = document.getElementById('id-div-react');
+    // TODO: define Reducer
+    function reducerCounter(state, action) {
+        if (typeof state === 'undefined') {
+            return 0
+        }
+        switch (action.type) {
+            case 'INCREMENT':
+                return state + 1
+            case 'DECREMENT':
+                return state - 1
+            default:
+                return state
+        }
+    }
+    // TODO: Create Store
+    var store = Redux.createStore(reducerCounter);
+    var vCount = document.getElementById('id-count');
+    // TODO: render
+    function render() {
+        let curCount = store.getState().toString();
+        console.log("Current count is " + curCount + ".");
+        vCount.innerHTML = curCount;
+    }
+    render();
+    store.subscribe(render);    // TODO: subscribe
+    // TODO: dispatch
+    document.getElementById('increment').addEventListener('click', function () {
+        store.dispatch({ type: 'INCREMENT' })
+    });
+    document.getElementById('decrement').addEventListener('click', function () {
+        store.dispatch({ type: 'DECREMENT' })
+    });
+    document.getElementById('incrementIfOdd').addEventListener('click', function () {
+        if (store.getState() % 2 !== 0) {
+            store.dispatch({ type: 'INCREMENT' })
+        }
+    });
+    document.getElementById('incrementAsync').addEventListener('click', function () {
+        setTimeout(function () {
+            store.dispatch({ type: 'INCREMENT' })
+        }, 1000)
+    });
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this section for a production-ready setup with JSX:
+  https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+  In a larger project, you can use an integrated toolchain that includes JSX instead:
+  https://reactjs.org/docs/create-a-new-react-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  https://reactjs.org/docs/react-without-jsx.html
+-->
+</body>
+</html>
