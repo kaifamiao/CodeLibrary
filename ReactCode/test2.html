@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+</head>
+<style>
+    .cls{
+        color:brown;
+        margin: 0 auto;
+        font-size: 40px;
+    }
+</style>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        function Hello(props){
+            const cls={
+                color: "blue",
+                fontSize: "30px"
+                
+            }
+            return(
+                <div>
+                    <div className="cls">This example all in one</div>
+                    <p style={cls}>hello Component，{ props.name }</p>
+                </div>
+            )
+        }
+        class World extends React.Component{
+            constructor(props){
+                super(props);
+                this.state={
+                    name: props.name
+                }
+            }
+            show(e){
+                this.setState({
+                    name: e.target.value,
+                })
+            }
+            render(){
+                return(
+                    <div>
+                        <Hello name={this.state.name}/>
+                        <hr/>
+                        <h2>world Component</h2>
+                        <input type="text" onChange={this.show.bind(this)} />
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<World />,document.getElementById("root"))
+    </script>
+</body>
+</html>
