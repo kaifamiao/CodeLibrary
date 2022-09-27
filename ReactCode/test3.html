@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class blackjack {
+            constructor(flower_color) {
+                this.flower_color = flower_color
+            }
+        }
+        const list = [];
+        for (var i = 1; i <= 13; i++) {
+            list.push(new blackjack("黑桃:" + i))
+            list.push(new blackjack("红桃:" + i))
+            list.push(new blackjack("方块:" + i))
+            list.push(new blackjack("梅花:" + i))
+        }
+        list.sort(function () {
+            return 0.5 - Math.random()
+        })
+        console.log('初始化长度:', list.length);
+        console.log('初始化长度:', list);
+
+        const html = [];
+        list.forEach((item, index) => {
+            html.push(
+                // 生成组件时带上key值
+                <li key={index}>{item.flower_color}</li>
+
+            );
+        });
+
+        class player {
+            t_list_poker = [];
+            t_list_point = [];
+            constructor(name, poker, count) {
+                this.name = name;
+                this.count = count
+                this.sum = 0;
+                this.isPK = false;
+                this.state = 0;
+                this.winner = "庄"
+            }
+            vpointsum() {
+                this.sum = 0;
+                for (var i = 0; i < this.t_list_point.length; i++) {
+                    this.sum += this.t_list_point[i]
+                }
+                return this.sum;
+            }
+            isPkfunc(vnum) {
+                if (vnum == true) this.isPK = true;
+            }
+        }
+
+        /*初始化 list是初始化的牌数，playN是多少个玩家+1，初始多少牌*/
+        function init(list, playN, initSum = 2,) {
+            var iszhuangjia = Math.round(Math.random() * (peopleSum));
+            var playSum = playN + 1
+            console.log("开始发牌。。。。", '玩家数量', playSum);
+            let play_obj = [];
+            for (var i = 0; i < playSum; i++) {
+                play_obj[i] = new player("玩家" + i, 0, 0);
+            }
+            for (var j = 0; j < initSum; j++) {
+                for (var i = 0; i < playSum; i++) {
+                    //随机产生庄家
+                    play_obj[i].isPkfunc(i == iszhuangjia);
+                    var f = list.pop().flower_color
+                    play_obj[i].t_list_poker.push(f);
+                    play_obj[i].count = play_obj[i].count + 1;
+                    play_obj[i].t_list_point.push(parseInt(f.split(':')[1]));
+                }
+            }
+            for (var i = 0; i < playSum; i++) {
+                play_obj[i].vpointsum()
+            }
+            return play_obj;
+        }
+
+
+        const peopleSum = 2;
+        class Hello extends React.Component {
+            constructor(props) {
+                super(props);
+
+                this.play_obj = init(list, peopleSum, 2);
+                console.log(this.play_obj)
+            }
+            comparePlay() {
+                var pkOject = new player()
+                for (var i = 0; i < this.play_obj.length; i++) {
+                    if (this.play_obj[i].isPK == true) {
+                        pkOject = this.play_obj[i];
+                        console.log("庄家是：", this.play_obj[i].name);
+                    }
+                }
+                //console.log(pkOject)
+                for (var i = 0; i < this.play_obj.length; i++) {
+                    if (this.play_obj[i].sum < 21 && this.play_obj[i].sum > pkOject.sum && this.play_obj[i].isPK == false) {
+                        this.play_obj[i].winner = "赢了";
+                    }
+
+                    if (this.play_obj[i].sum > 21 && !this.play_obj[i].isPK && this.play_obj[i].isPK == false) {
+                        this.play_obj[i].winner = "爆了";
+
+                    }
+
+                    if (this.play_obj[i].sum <= 21 && this.play_obj[i].sum <= pkOject.sum && this.play_obj[i].isPK == false) {
+                        this.play_obj[i].winner = "输了";
+
+                    }
+                }
+                console.log(this.play_obj);
+            }
+            render() {
+                return (
+                    <div>
+                        <p><button onClick={this.comparePlay.bind(this)} >开牌</button></p>
+                    </div>
+
+                )
+            }
+
+        }
+
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<Hello />);
+
+    </script>
+</body>
+
+</html>
