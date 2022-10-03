@@ -1,0 +1,30 @@
+### 解题思路
+先求链表长度，然后依次从头开始向后遍历，每一位为2^(n-1)
+
+### 代码
+
+```golang
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func getDecimalValue(head *ListNode) int {
+	n := 0
+	p := head
+	for p != nil {
+		n++
+		p = p.Next
+	}
+	
+	ret := 0
+	for head != nil {
+		ret += int(math.Pow(2, float64(n -1))) * head.Val
+		head = head.Next
+		n--
+	}
+	return ret
+}
+```

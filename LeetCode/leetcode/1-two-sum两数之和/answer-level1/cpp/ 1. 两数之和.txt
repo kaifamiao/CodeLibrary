@@ -1,0 +1,24 @@
+### 解题思路
+使用哈希表,时间复杂度为o(n)
+可以把num[i]+num[j]=target分解为num[i]和target-num[j]
+哈希表中,key为num[i],value是索引i.
+在一次遍历过程中,查找key为target-num[i]的,如果存在,则找到两数.如果不存在,则将当前这个数字存到map中
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map <int, int> m;
+        for(int i = 0; i < nums.size(); ++i) {
+            if(m.find(target-nums[i]) != m.end()) {
+                // 这时找到num[i] + m[target-num[i]] = target
+                return {m[target-nums[i]], i};
+            } 
+            m[nums[i]] = i;
+        }
+        return {};
+    }
+};
+```

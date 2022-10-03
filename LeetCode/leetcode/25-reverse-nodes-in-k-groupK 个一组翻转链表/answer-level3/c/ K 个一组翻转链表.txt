@@ -1,0 +1,76 @@
+### 解题思路
+该算法的采用了分段反转的方法，空间复杂的为n*k^2,最小为1，最大n^2
+- 循环之前：
+计算出链表的长度len和要反转的片段数目loop，以及新链表的表头
+为什么循环次数为loop+1？因为当长度不是K的整数倍时候反转之后要将剩下的链表连接起来
+- 进入循环
+在每次循环开始时计算出本次循环和下一次循环的开始start和next_start
+从片段的末端依次改变元素的next指向为它的前一个元素，直到片段的第一个元素
+### 代码
+
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+struct ListNode* reverseKGroup(struct ListNode* head, int k){
+    struct ListNode* newChain,*start,*next_start=NULL,*next,*p,*target;
+    int len = 1;//链表长度
+    int loop;//需要反转的片段数量
+    //当k为1时直接返回原链表
+    if(k==1){
+        return head;
+    }
+    //获取新的表头
+    p = head;
+    for(int i=0;i<k-1;i++){
+        p = p->next;
+    };
+    newChain = p;
+    
+    //获取链表长度
+    next = head->next;
+    while(next!=NULL){
+        len ++;
+        next = next->next;
+    };
+    //获取要循环的次数
+    loop = len/k;
+    start = head;
+    next = newChain;
+    while(loop+1>0){
+        if(loop>0){
+            p = start;
+            for(int i=0;i<k;i++){
+                p = p ->next;
+            };
+            next_start = p;   
+        }
+        int n2 = k-1;
+        if(loop>0){
+            for(int n=k;n>0;n--){
+                target = start;
+                int index = n2;
+                while(index>0){
+                    target = target->next;//target
+                    index--;
+                };
+                n2 --;
+                if(next!=target){
+                    next->next = target;
+                }
+                next = target;
+            };
+        }else{
+            next->next = start;
+        }
+        start = next_start;
+         loop--;
+    };
+    return newChain;
+}
+```

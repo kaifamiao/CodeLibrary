@@ -1,0 +1,28 @@
+### 解题思路
+这题考察二分查找的应用，查找第一个大于等于 target 的值或者查找最后一个小于等于 target 的值
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        while (low <= high) {
+            int mid = low + ((high - low) >> 1);
+            if (nums[mid] >= target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        if (low >= nums.size() || nums[low] != target) return 0;
+        int res = 1;
+        for (int i = low + 1; i < nums.size(); i++) {
+            if (nums[i] != target) break;
+            else res++;
+        }
+        return res;
+    }
+};
+```

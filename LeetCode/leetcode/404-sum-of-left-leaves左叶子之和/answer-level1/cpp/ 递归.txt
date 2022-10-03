@@ -1,0 +1,22 @@
+### 解题思路
+用一个bool判断是否为左子树。
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    int core(TreeNode* root, bool is_left) {
+        if (root==NULL) 
+            return 0;
+        if (is_left && root->left==NULL && root->right==NULL) 
+            return root->val;
+        else
+            return core(root->left, true) + core(root->right, false);
+    }
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root==NULL) return 0;
+        return core(root->left, true)+core(root->right, false);
+    }
+};
+```

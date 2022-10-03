@@ -1,0 +1,35 @@
+### 解题思路
+我的思路：无
+	
+
+复杂度分析：                                                             
+	• 时间复杂度：o(n)
+	• 空间复杂度：o(n)
+
+
+
+### 代码
+
+```python3
+class Solution:
+    def maxNumberOfBalloons(self, text: str) -> int:
+        dict_balloon = {'b':1,'a':1,'l':2,'o':2,'n':1}
+        dict_text = {}
+        for x in text:
+            if x not in dict_text:
+                dict_text[x] = 1
+            else:
+                dict_text[x] += 1
+        if 'b' in text:
+            result = dict_text['b']
+        else:
+            return 0
+        for m in dict_text:
+            if m == 'b' or m == 'a' or m == 'n':
+                result = min(result,dict_text[m])
+            elif m == 'l' or m == 'o':
+                result = min(result,dict_text[m]//2)
+        return result
+                
+        
+```

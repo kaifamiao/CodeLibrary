@@ -1,0 +1,25 @@
+### 解题思路
+使用冒泡排序的方式，排到第k位大的元素就停止排序，减少循环排序的次数
+
+### 代码
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function(nums, k) {
+   let len = nums.length-1
+   for(let i=len,tmp;i>len-k;i--){
+       for(let j=0;j<i;j++){
+           if(nums[j]>nums[j+1]){
+               tmp = nums[j]
+               nums[j] = nums[j+1]
+               nums[j+1] = tmp
+           }
+       }
+   }
+   return nums[len+1-k]
+};
+```

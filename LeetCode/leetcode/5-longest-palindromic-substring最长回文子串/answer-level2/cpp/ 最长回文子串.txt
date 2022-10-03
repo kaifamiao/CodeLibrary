@@ -1,0 +1,98 @@
+### 解题思路
+思路就是以字符串里面每一个字符为中心，向外拓展。然后找出其中最大的那个，记住它的下标以及长度。
+中间发生了很多的意外。太多的特殊情况了。
+判断语句中间一定不要写成“=”；
+
+
+### 代码
+
+```cpp
+class Solution {
+public:
+string longestPalindrome(string s) {
+	int location = 0;
+	int result = 1;
+	int temp;
+	if (s.size() == 0)
+		return "";
+	if (s.size() == 1)
+		return s;
+	if (s[0] == s[1]) {
+		location = 0;
+		result = 2;
+		while (result < s.size() && s[location] == s[location + result])
+			result++;
+		location = location + result / 2 - 1;//当“aaaa...."这种后面字符相同时。处理location的大小，							//适应后续找出最终结果的切片方式。
+	}// “aaaaaa.."这种类型的。把从零开始的单独列出来是因为防止even函数每次都要判断是否是边界。这样其实
+		//未必是一个好的措施。因为显得这个函数特别乱。不过处理边界条件也确实是上级函数应该做的事情。
+	else if (s[s.size() - 1] == s[s.size() - 2]){
+		location = s.size() - 1;
+		result = 2;
+		while (result < s.size() && s[location] == s[location - result])
+			result++;
+		if (result > 2) {
+			if (result % 2 == 0)
+				location = location - result / 2;
+			else
+				location = location - result / 2 - 1;
+		}//当“...aaaa"这种后面字符相同时。处理location的大小，适应后续找出最终结果的切片方式。
+	}//”...aaaa"处理这种特殊情况。
+	for (int i = 1; i < s.size() - 1; i++) {//遍历所以字符
+		temp = odd(s, i);
+		if (result < temp) {//当找到更大值时更新数据
+			location = i;
+			result = temp;
+		}
+		temp = even(s, i);
+		if (result < temp) {
+			location = i;
+			result = temp;
+		}
+	}//分别从以中心两边对称和完全对称出发，找出最大值。
+	string resultString;
+	if (result % 2 == 0) {
+		resultString = s.substr(location - result / 2, result);
+	}//当最大值为中心对称是，求出最长回文串
+	else {
+		if (s[location] == s[location + 1])
+			resultString = s.substr(location - result / 2 + 1, result);
+		else
+			resultString = s.substr(location - result / 2, result);
+		
+	}//当为完全对称是，找出回文串
+	return resultString;
+}
+int odd(const string& temp, int location) {
+	int n = 1;
+	while (location - n >= 0 && location + n < temp.size()) {
+		if (temp[location - n] == temp[location + n])
+			n++;//当相等时，可以再次尝试向外扩展
+		else
+			break;
+	}
+	return 2 * n - 1;
+}
+int even(const string& temp, int location) {
+	int n = 1;
+	if (temp[location] == temp[location + 1]) {
+		while (location - n >= 0 && location + n + 1 < temp.size()) {
+			if (temp[location - n] == temp[location + n + 1])
+				n++;//继续拓展
+			else
+				break;
+		}
+	}//当次字符串于左边相等时
+	else if (temp[location] == temp[location - 1]) {
+		while (location + n >= 0 && location - n - 1 < temp.size()) {
+			if (temp[location + n] == temp[location - n - 1])
+				n++;
+			else
+				break;
+		}
+	}//当字符串于右边相等时
+	else
+		return 1;
+	return 2 * n;
+}
+};
+```

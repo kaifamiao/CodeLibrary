@@ -1,0 +1,78 @@
+#  最接近的三数之和
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+```
+例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+```
+
+<hr>
+
+##  解法1：暴力法
+```
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());
+        if(nums.size()<3) return {};
+        int closest=target+10000000;
+        for(int i=0;i<nums.size()-2;i++)
+        {
+            int fix=nums[i];
+            if(fix>target&&abs(fix+nums[i+1]+nums[i+2]-target)>abs(closest-target)) break;
+            //这句话能够省略很多无用功
+            for(int j=i+1;j<nums.size()-1;j++)
+            {
+                for(int k=j+1;k<nums.size();k++)
+                {
+                    int temp=abs(target-fix-nums[j]-nums[k]);
+                    if(temp<abs(closest-target))
+                        closest=fix+nums[j]+nums[k];
+                }
+            }
+        }
+        return closest;
+    }
+};
+```
+
+##  解法2：双指针法（碰撞指针）
+```
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());
+        if(nums.size()<3)
+            return {};
+        int closest=target+1000000;
+        int cha=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            int fix=nums[i];
+            int l=i+1;
+            int r=nums.size()-1;
+            if(l>=r) break;
+            while(l<r)
+            {
+                if(nums[l]+nums[r]+fix==target) return target;
+                if(nums[l]+nums[r]<target-fix)
+                {
+                    cha=target-fix-nums[r]-nums[l];
+                    if(cha<abs(closest-target))
+                        closest=nums[l]+nums[r]+fix;
+                    l++;
+                }
+                else if(nums[l]+nums[r]>target-fix)
+                {
+                    cha=nums[l]+nums[r]+fix-target;
+                    if(cha<abs(closest-target))
+                        closest=nums[l]+nums[r]+fix;
+                    r--;
+                }
+            }
+        }
+        return closest;
+    }
+};
+```
+

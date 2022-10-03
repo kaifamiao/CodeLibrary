@@ -1,0 +1,39 @@
+回溯法 practice
+```cpp
+class Solution {
+
+private:
+    vector< vector<int> > res;
+    // candidates: 无重复元素的数组  [2,3,5]  target = 8
+    // index[0, index)已处理
+    void findCombinationSum(const vector<int> & candidates, int target, int index, vector<int> &p) {
+
+        if(target == 0) {
+            res.push_back(p);
+            return;
+        }
+        // if (target < 0) {
+        //     return;
+        // }
+        for (int i = index; i < candidates.size(); i++) {
+            if (target >= candidates[i]){
+                p.push_back(candidates[i]);
+                findCombinationSum(candidates, target-candidates[i], i, p);
+                p.pop_back();
+            }
+        }
+    }
+
+public:
+    vector< vector<int> > combinationSum(vector<int>& candidates, int target) {
+
+        if (candidates.size() == 0)
+            return res;
+        
+        vector<int> p;
+        findCombinationSum(candidates, target, 0, p);
+        return res;
+        
+    }
+};
+```

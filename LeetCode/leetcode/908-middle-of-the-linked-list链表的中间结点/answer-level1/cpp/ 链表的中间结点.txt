@@ -1,0 +1,41 @@
+### 解题思路
+前后两个指针
+
+### 代码
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+
+        ListNode* first;
+        ListNode* second;
+        //bool flag = true;
+        first = head;
+        second = first->next;
+        while(first!=NULL && (second!=NULL)){
+            first = first->next;
+            if(second->next == NULL){
+                break;
+            }else{
+                second = second->next;
+                if(second->next==NULL){
+                    break;
+                }else{
+                    second = second->next;
+                }
+            }
+        }
+
+        return first;
+    }
+};
+```

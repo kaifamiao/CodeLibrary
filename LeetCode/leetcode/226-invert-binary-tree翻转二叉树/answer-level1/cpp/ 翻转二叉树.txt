@@ -1,0 +1,57 @@
+翻转一棵二叉树。
+
+示例：
+
+输入：
+
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+输出：
+
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+
+
+### 解题思路
+从上到下，翻转两边即可，需要注意的是无法直接用invertTree，因为有返回值，所以需要再写一个无返回值的函数。
+无返回值的函数也可以写return。
+边界情况：输入为空。
+
+### 代码
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void invert(TreeNode* root){
+        if(root== nullptr) return ;
+        TreeNode* tmp = root->left;
+        root->left = root->right;
+        root->right = tmp;
+
+        invert(root->left);
+        invert(root->right);
+    }
+    TreeNode* invertTree(TreeNode* root) {
+        if(!root) return nullptr;
+        invert(root);
+        return root;
+    }
+
+
+};
+```

@@ -1,0 +1,11 @@
+### 解题思路
+null
+
+### 代码
+
+```mysql
+# Write your MySQL query statement below
+select w1.id "Id"
+from Weather w1,Weather w2
+where DATEDIFF(w1.RecordDate,w2.RecordDate)=1 and w1.Temperature>w2.Temperature
+```

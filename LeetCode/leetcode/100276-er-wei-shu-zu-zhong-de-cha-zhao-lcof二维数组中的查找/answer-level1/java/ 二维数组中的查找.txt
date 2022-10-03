@@ -1,0 +1,77 @@
+### 解题思路
+此处撰写解题思路
+从数组的第0排0列递归判断第一个大于数num的值的下标值，
+如果当前数组的行数为1行直接向右遍历
+如果当前数组的列数为1列直接向下遍历
+然后向这个值的左半边遍历寻找等于这个num的值，排除行值的下标小于等于当前row-1的值，并且排除列值大于等于col的值，找到返回ture
+然后向这个值的上半边遍历寻找等于这个num的值，排除行值的下标小于等于当前col-1的值，并且排除h行值大于等于row的值，找到返回ture
+### 代码
+
+```java
+class Solution {
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        int row = 0;//排
+        int col = 0;//列
+        return  isExist(matrix, target, row, col);
+
+    }
+    private static boolean isExist(int[][] arr, int num, int row, int col) {
+        boolean f = false;
+        if (row > arr.length - 1 || col > arr[0].length - 1) {
+            f = false;
+            return f;
+        } else {
+            if (arr[row][col] == num) {
+                f = true;
+            } else if (arr[row][col] < num) {
+                //判断数组的行值是否为1，如果为1行，直接向右遍历判断
+                if (arr.length == 1) {
+                    //从右向左找
+                    for (int i = 0; i < arr[0].length; i++) {
+                        if (arr[0][i] == num) {
+                            f = true;
+                            return f;
+                        }
+                    }
+                }else if(arr[0].length==1){//判断数组的列值是否为1，如果为1列，直接向右遍历判断
+                   //从上向下找
+                    for (int i = 1; i < arr.length; i++) {
+                        if (arr[i][0] == num) {
+                            f = true;
+                            return f;
+                        }
+                    }
+                } 
+                f = isExist(arr, num, row + 1, col + 1);//斜向下找，第一个大于num的数
+                
+            } else {
+                boolean leftf = false;
+                boolean upf = false;
+                if ((row - 1) >= 0 && (col - 1) >= 0) {
+                    if (arr[row - 1][col - 1] < num) {
+                        //从右向左找到等于num的值，找左半边
+                        for (int i = col - 1; i >= 0; i--) {
+                            for (int j = arr.length-1; j >row-1 ; j--) {
+                                if (arr[j][i] == num) {
+                                    leftf = true;
+                                }
+                            }
+                           
+                        }
+                       //从下向上找等于num的值，找上半边
+                        for (int i = row - 1; i >= 0; i--) {
+                            for (int j = arr[0].length-1; j >col-1 ; j--) {
+                                if(arr[i][j]==num){
+                                    upf = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                f = leftf || upf;
+            }
+        }
+        return f;
+    }
+}

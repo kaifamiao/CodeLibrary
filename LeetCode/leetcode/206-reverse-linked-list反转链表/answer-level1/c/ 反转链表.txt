@@ -1,0 +1,29 @@
+### 解题思路
+迭代的改变相邻两个结点的位置关系
+
+### 代码
+
+```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+struct ListNode* reverseList(struct ListNode* head){
+    if(!head) return head;
+    struct ListNode* pre=NULL;
+    struct ListNode* cur=head;
+    struct ListNode* next=NULL;
+    while(cur){
+        next = cur->next;
+        cur->next=pre;
+        pre=cur;
+        cur=next;
+    }
+    return pre;
+}
+```

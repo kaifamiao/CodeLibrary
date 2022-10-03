@@ -1,0 +1,157 @@
+### 方法一：暴力法
+
+有些人会忍不住提出一个快速的解决方案，不幸的是，这个解决方案有缺陷(但是可以很容易地纠正)：
+
+反转 $S$，使之变成 $S'$。找到 $S$ 和 $S'$ 之间最长的公共子串，这也必然是最长的回文子串。
+
+这似乎是可行的，让我们看看下面的一些例子。
+
+例如，$S = {“caba”}$，$S' = {“abac”}$：
+
+$S$ 以及 $S'$ 之间的最长公共子串为 ${“aba”}$，恰恰是答案。
+
+让我们尝试一下这个例子：$S = {“abacdfgdcaba”}$，$S' = {“abacdgfdcaba”}$：
+
+$S$ 以及 $S'$ 之间的最长公共子串为 ${“abacd”}$，显然，这不是回文。
+
+这种方法确实最好理解的额，但效率确实是低。所以放在编辑器里面跑，都是直接报超出时间限制的错误的，这是最dan疼的
+
+代码如下：
+```Python
+def longestPalindrome(self, s):
+        s_inverse = s[::-1]
+        max = 0
+        maxStr = ""
+        if len(s) < 2:
+            return s
+        for start in range(len(s)):
+            for end in range(start+1, len(s)+1):
+                if s.count(s_inverse[start:end]) > 0:
+                    index = s.index(s_inverse[start:end])
+                    start_inverse = len(s) - end
+                    if (end - start > max) and (index == start_inverse):
+                        max = end - start
+                        maxStr = s_inverse[start:end]
+        return maxStr
+```
+这种方法是巧妙地运用了python 字符串的一些内置函数执行的，代码量很少，但跑起来时间不短。
+
+### 方法二：动态规划
+
+为了改进暴力法，我们首先观察如何避免在验证回文时进行不必要的重复计算。考虑 ${“ababa”}$ 这个示例。如果我们已经知道 ${“bab”}$ 是回文，那么很明显，${“ababa”}$ 一定是回文，因为它的左首字母和右尾字母是相同的。
+
+我们给出 $P(i,j)$ 的定义如下：
+
+这产生了一个直观的动态规划解法，我们首先初始化一字母和二字母的回文，然后找到所有三字母回文，并依此类推…
+
+复杂度分析
+
+时间复杂度：$O(n^2)$， 这里给出我们的运行时间复杂度为 $O(n^2)$。
+
+空间复杂度：$O(n^2)$， 该方法使用 $O(n^2)$ 的空间来存储表。
+
+代码如下：
+```python
+ def longestPalindrome(self, s):
+        dpArray = np.zeros([1000, 1000])
+        maxIndex = -1
+        maxStr = ""
+        if len(s) < 2:
+            return s
+        dpArray[0][0] = 1
+        for end in range(1, len(s)):
+            dpArray[end][end] = 1
+            for start in range(end+1):
+                if end == start+1 and s[end] == s[start]:
+                    dpArray[start][end] = 1
+                if end > start + 1:
+                    dpArray[start][end] = dpArray[start+1][end-1] and (s[end] == s[start])
+                if end - start >= maxIndex and dpArray[start][end]:
+                    maxIndex = end - start
+                    maxStr = s[start:end+1]
+                    print(maxStr)
+        print(dpArray[0:len(s), 0:len(s)])
+        return maxStr
+```
+看起来确实是牛逼了一些，但不知为何在我的电脑上跑，它还是说超出时间限制，当时真的是快把我给气炸了
+
+
+### 方法三：中心扩展算法
+
+事实上，只需使用恒定的空间，我们就可以在 $O(n^2)$ 的时间内解决这个问题。
+
+我们观察到回文中心的两侧互为镜像。因此，回文可以从它的中心展开，并且只有 $2n - 1$ 个这样的中心。
+
+你可能会问，为什么会是 $2n - 1$个，而不是 $n$ 个中心？原因在于所含字母数为偶数的回文的中心可以处于两字母之间（例如 ${“abba”}$ 的中心在两个 ${‘b’}$ 之间）。
+
+代码如下：
+```python
+def longestPalindrome(self, s):
+        maxLen = 0
+        maxStr1 = ""
+        for start_current in range(len(s)):
+            if len(s) - start_current <= int(maxLen/2):
+                break
+            start_head = start_current
+            start_last = start_current + 1
+            while start_head >= 0 and start_last < len(s) and s[start_head] == s[start_last]:
+                start_head -= 1
+                start_last += 1
+            if start_last - start_head - 1 >= maxLen:
+                maxLen = start_last - start_head - 1
+                maxStr1 = s[start_head + 1: start_last]
+            start_head = start_current
+            start_last = start_current
+            while start_last < len(s) and start_head >= 0 and s[start_head] == s[start_last]:
+                start_head -= 1
+                start_last += 1
+            if start_last - start_head - 1 >= maxLen:
+                maxLen = start_last - start_head - 1
+                maxStr1 = s[start_head + 1: start_last]
+        return maxStr1
+```
+到了这种方法总算是给跑出来了，而且它的速度也算是中等吧！真的是一把鼻涕一把泪啊，本来想再把速度给提高的，但是被之前的失败经历给打击了，容我缓一段时间再来刚，最后把它的执行时间给贴出来。
+
+今天再做时就很习惯的用上了动态规划的方法，因为之前也是被动态规划的题目折腾的死去活来的，所以就写了一篇总结，大家可以看看，里面我对解题步骤写了一套模板。
+
+代码如下：
+```python
+class Solution(object):
+    # 此题采用动态规划的方法
+    # 比较发现：还是将标记矩阵的值设为布尔值最好，方便递归判断
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if len(s) == 0:
+            return ""
+        # 首先给标记矩阵初始化，即设置为全False矩阵
+        flag_matrix = []
+        for s_index in range(len(s)):
+            flag_matrix.append([False]*len(s))
+        # 设置取得最大回文子串的下标起始值和终点值
+        max_start = 0
+        max_end = 0
+        # 两层for循环来更新标记矩阵的值
+        for end in range(len(s)):
+            for start in range(end+1):
+                if s[end] == s[start]:
+                    if end-1 > start+1:
+                        flag_matrix[end][start] = flag_matrix[end-1][start+1]
+                    else:
+                        flag_matrix[end][start] = True
+                else:
+                    flag_matrix[end][start] = False
+                if flag_matrix[end][start] > 0:
+                    if end-start > max_end-max_start:
+                        max_start = start
+                        max_end = end
+        return s[max_start:max_end+1]
+
+if __name__ == "__main__":
+    s = "aba"
+    max_s = Solution().longestPalindrome(s)
+    print(max_s)
+```
+代码里我对一些注意事项都做了注释，应该还是挺容易理解的。执行效率在 13% 左右。

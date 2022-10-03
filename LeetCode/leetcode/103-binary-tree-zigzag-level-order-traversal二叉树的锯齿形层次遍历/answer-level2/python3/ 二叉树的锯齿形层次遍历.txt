@@ -1,0 +1,48 @@
+### 解题思路
+用两个栈
+从左往左的行，当前节点的左子树先进栈
+从右往左的行，当前节点的右子树先进栈
+
+### 代码
+
+```python3
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return([])
+        stack=[]
+        stack2=[]
+        stack2.append(root)
+        ans = []
+        while stack2:
+            ans1,ans2=[],[]
+            while stack2:
+                root = stack2.pop()
+                if root:
+                    ans2.append(root.val)
+                    stack.append(root.left)
+                    stack.append(root.right)
+                else:
+                    continue
+            ans.append(ans2)
+            while stack:
+                root = stack.pop()
+                if root:
+                    ans1.append(root.val)
+                    stack2.append(root.right)
+                    stack2.append(root.left)
+                else:
+                    continue
+            ans.append(ans1)
+            while not ans[::-1][0]:
+                ans.pop()
+        return(ans)
+                
+```

@@ -1,0 +1,39 @@
+### 算法分析
+1. 添加哨兵节点sentryNode，其下一节点指向头节点
+2. 设定node指向sentryNode
+3. 遍历node下一节点直到为空
+4. 如果node下一节点的值为val，则删除该节点
+5. 返回sentryNode的下一节点
+### 复杂度分析
++ 时间复杂度：O(n)，n为链表长度
++ 空间复杂度：O(1)
+### 源码
+```C++ []
+struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode(int x) : val(x), next(NULL) {}
+};
+
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* sentryNode = new ListNode(-1);
+        sentryNode->next = head;
+        ListNode* node = sentryNode;
+        
+        while (node != NULL && node->next != NULL)
+        {
+            if (val == node->next->val)
+            {
+                node->next = node->next->next;
+            }
+            else
+            {
+                node = node->next;
+            }       
+        }
+        
+        return sentryNode->next;
+    }
+};

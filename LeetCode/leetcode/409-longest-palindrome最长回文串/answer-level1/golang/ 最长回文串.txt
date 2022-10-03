@@ -1,0 +1,27 @@
+### 解题思路
+第一时间想到使用hash存下来字符出现的次数，然后取每个字符val / 2 * 2次， 存在剩余字符则加一
+
+### 代码
+
+```golang
+func longestPalindrome(s string) int {
+    hashMap := make(map[byte]int)
+    for _, char := range s {
+        hashMap[byte(char)] += 1
+    }
+    flag := false
+    res := 0
+    for _, val := range hashMap {
+        if val > 0 {
+            if val % 2 == 1 {
+                flag = true
+            }
+            res += val / 2 * 2 
+        }
+    }
+    if flag {
+        res++
+    }
+    return res
+}
+```

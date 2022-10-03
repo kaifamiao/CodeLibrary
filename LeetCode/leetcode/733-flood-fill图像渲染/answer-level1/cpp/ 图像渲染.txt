@@ -1,0 +1,44 @@
+### 算法分析
+1. 定义oldColor=iamge[sr][sc]，如果oldColor==newColor直接返回image
+2. 否则使用深度优先搜索，定义递归函数用于递归遍历节点<r,c>
+3. 如果image[r][c] != oldColor则返回
+4. 否则image[r][c] = newColor，递归调用<r,c>的四周节点
+### 复杂度分析
++ 时间复杂度：O(n), n=r*c，最坏情况遍历二维数组所有的节点
++ 空间复杂度：O(n)，递归调用栈使用的空间
+### 源码
+```C++ []
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int oldColor = image[sr][sc];
+        if (oldColor != newColor)
+            floodFillRecusive(image, sr, sc, oldColor, newColor);
+        return image;
+    }
+
+    void floodFillRecusive(vector<vector<int>>& image, int r, int c, int oldColor, int newColor)
+    {
+        if (image[r][c] != oldColor)
+            return;
+        
+        image[r][c] = newColor;
+
+        if (r - 1 >= 0)
+        {
+            floodFillRecusive(image, r - 1, c, oldColor, newColor);
+        }
+        if (r + 1 < image.size())
+        {
+            floodFillRecusive(image, r + 1, c, oldColor, newColor);
+        }
+        if (c - 1 >= 0)
+        {
+            floodFillRecusive(image, r, c - 1, oldColor, newColor);
+        }
+        if (c + 1 < image[r].size())
+        {
+            floodFillRecusive(image, r, c + 1, oldColor, newColor);
+        }
+    }
+};

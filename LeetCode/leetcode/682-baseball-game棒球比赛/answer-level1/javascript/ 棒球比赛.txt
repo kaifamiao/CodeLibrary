@@ -1,0 +1,34 @@
+### 解题思路
+用栈存下每一轮的得分，用sum记录总得分。
+
+### 代码
+
+```javascript
+/**
+ * @param {string[]} ops
+ * @return {number}
+ */
+var calPoints = function(ops) {
+    var stack = []
+    var sum = 0
+    for(var i =0,len = ops.length;i<len;i++){
+        var stackLength = stack.length
+        var cur = ops[i]
+        if(cur === 'C'){
+            sum -= stack.pop()
+        }else if(cur === 'D'){
+            var temp = stack[stackLength-1]*2
+            stack.push(temp)
+            sum += temp
+        }else if(cur === '+'){
+            var temp = stack[stackLength-1] + stack[stackLength -2]
+            stack.push(temp)
+            sum += temp
+        }else{
+            stack.push(Number(cur))
+            sum+= Number(cur)
+        }
+    }
+    return sum
+};
+```

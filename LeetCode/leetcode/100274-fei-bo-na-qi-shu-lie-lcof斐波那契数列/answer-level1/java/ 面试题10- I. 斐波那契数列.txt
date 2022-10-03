@@ -1,0 +1,32 @@
+### 解题思路
+用栈的方法解决
+面试题10- I. 斐波那契数列
+### 代码
+
+```java
+class Solution {
+    		public static int fib(int n) { 
+		Stack<Integer>stack=new Stack<>();
+		if(n==0||n==1)return n;
+		if(n==2)return 1;
+        int temp=1;
+        int i=3;
+        stack.push(1);
+        int result=0;
+        while (i<=n) {
+        	 result=0;
+        	while(stack.size()!=2) {
+        		stack.push(temp);
+        	}
+        		temp=stack.pop();
+        		result+=temp;
+        		result+=stack.pop();
+        		result%=1000000007;
+        		stack.push(temp);
+        		stack.push(result); 
+        		i++;
+		}
+        return result;
+}
+}
+```

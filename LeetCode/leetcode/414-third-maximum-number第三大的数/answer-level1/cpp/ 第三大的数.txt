@@ -1,0 +1,96 @@
+### 解题思路
+逻辑硬刚！
+遍历所有数
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    int thirdMax(vector<int> &nums)
+    {
+        int big, mid, small;
+        int count = 0;
+        int i = 0;
+        for (auto num : nums)
+        {
+            if (count == 0)
+            {
+                big = num;
+                count++;
+            }
+            else if (count == 1)
+            {
+                if (big == num)
+                {
+                    continue;
+                }
+                else if (num > big)
+                {
+                    mid = big;
+                    big = num;
+                }
+                else
+                {
+                    mid = num;
+                }
+                count++;
+            }
+            else if (count == 2)
+            {
+                if (num == big || num == mid)
+                {
+                    continue;
+                }
+                else if (num > big)
+                {
+                    small = mid;
+                    mid = big;
+                    big = num;
+                }
+                else if (num > mid)
+                {
+                    small = mid;
+                    mid = num;
+                }
+                else
+                {
+                    small = num;
+                }
+                count++;
+            }
+            else
+            {
+                if (num == big || num == mid || num == small)
+                {
+                    continue;
+                }
+                else if (num > big)
+                {
+                    small = mid;
+                    mid = big;
+                    big = num;
+                }
+                else if (num > mid)
+                {
+                    small = mid;
+                    mid = num;
+                }
+                else if (num > small)
+                {
+                    small = num;
+                }
+            }
+        }
+
+        if (count < 3)
+        {
+            return big;
+        }
+        else
+        {
+            return small;
+        }
+    }
+};
+```

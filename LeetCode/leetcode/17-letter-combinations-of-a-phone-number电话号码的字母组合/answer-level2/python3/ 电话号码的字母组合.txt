@@ -1,0 +1,56 @@
+### 解题思路
+难度在于：如何处理不同长度的数字字符串。
+
+解题思路：需要解决n长度的数字字符串，可以化解为第0个和后面n-1个的结果的组合，演变为第1个和后面n-2个结果的组合，以此类推，有点斐波那契数列的意思，先解决最后面两个
+
+### 代码
+
+```python3
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if len(digits) == 0:
+            return []
+
+        alpha = {
+            '2': ['a', 'b', 'c'],
+            '3': ['d', 'e', 'f'],
+            '4': ['g', 'h', 'i'],
+            '5': ['j', 'k', 'l'],
+            '6': ['m', 'n', 'o'],
+            '7': ['p', 'q', 'r', 's'],
+            '8': ['t', 'u', 'v'],
+            '9': ['w', 'x', 'y', 'z']
+        }
+
+        if len(digits) == 1:
+            return alpha[digits]
+        
+        res = []
+        def helper(s, tmp):  
+            if(s == ""):
+                res.append(tmp)
+                return
+            for c in alpha[s[0]]:
+                helper(s[1:],tmp + c)
+
+        helper(digits, "")
+        return res
+
+# 作者：zhu_shi_fu
+
+
+        # def getPairs(num1, num2):
+        #     res = []
+        #     for i in range(len(alpha[num1])):
+        #         for j in range(len(alpha[num2])):
+        #             res.append(alpha[num1][i] + alpha[num2][j])
+        #     return res
+
+        # result = []
+        # for i in range(len(digits) - 1):
+        #     for j in range(i + 1, len(digits)):
+        #         result = result + getPairs(digits[i], digits[j])
+        # return result
+
+
+```

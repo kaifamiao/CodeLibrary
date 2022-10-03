@@ -1,0 +1,60 @@
+### 解题思路
+
+
+### 代码
+
+```cpp
+class MaxQueue {
+public:
+    MaxQueue() {
+        
+    }
+    
+    int max_value() {
+        if(m_q.empty()) 
+            return -1;
+        else
+            return max.back();
+       
+    }
+    
+    void push_back(int value) {
+        m_q.insert(m_q.begin(),value);
+        if(max.empty()) max.push_back(value);
+        else
+        {
+            max.insert(max.begin(),value);
+            int i=0;
+            while(max[i]>m_q[i+1])
+            {
+                max[i+1]=max[i];
+                if(++i==max.size()-1) break;
+            }
+        }
+    }
+    
+    int pop_front() {
+        if(m_q.empty()) return -1;
+        else
+        {
+            int res=m_q.back();
+            m_q.pop_back();
+            max.pop_back();
+            return res;
+        }
+    }
+
+private:
+    vector<int> m_q;
+    vector<int> max;
+    
+};
+
+/**
+ * Your MaxQueue object will be instantiated and called as such:
+ * MaxQueue* obj = new MaxQueue();
+ * int param_1 = obj->max_value();
+ * obj->push_back(value);
+ * int param_3 = obj->pop_front();
+ */
+```

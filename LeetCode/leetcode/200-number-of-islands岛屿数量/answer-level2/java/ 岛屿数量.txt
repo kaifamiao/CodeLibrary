@@ -1,0 +1,376 @@
+![LeetCode 200 ZYH.mp4](0a3f7b6f-abd0-4af8-87ef-89c565b967d4)
+
+#### 方法一：深度优先搜索 【通过】
+
+**直觉**
+
+将二维网格看成一个无向图，竖直或水平相邻的 `1` 之间有边。
+
+**算法**
+
+线性扫描整个二维网格，如果一个结点包含 `1`，则以其为根结点启动深度优先搜索。在深度优先搜索过程中，每个访问过的结点被标记为 `0`。计数启动深度优先搜索的根结点的数量，即为岛屿的数量。
+
+下面的动画展示了整个算法。
+
+<![image.png](https://pic.leetcode-cn.com/5dae0de2a06f4eae5113f9cadfa5c51bbcf0b9347c5861aa73c93d7bc1d50b34-image.png),![image.png](https://pic.leetcode-cn.com/61a98091fe75de107bf886a608e87d5bb29d810b9e7eb1e00c541f49194ea543-image.png),![image.png](https://pic.leetcode-cn.com/6d060f275561dc390841f78d85124fd193efb0801ea2dc865b2767f1093e4f3a-image.png),![image.png](https://pic.leetcode-cn.com/233368eab82832268c3c7266fd7fe65c78626de9fd89cb90b3f36a7b4e52860d-image.png),![image.png](https://pic.leetcode-cn.com/bf055c3d5f6b310f6a110ada65d503de6d7793276f5638731c81c53b4276b835-image.png),![image.png](https://pic.leetcode-cn.com/195ba530a5350e0a8f8e372319d061c85316c1064017d5c00d7cfc2b0c055de6-image.png),![image.png](https://pic.leetcode-cn.com/c21a88bde9450ad83d6164c2df4677b16154fa5990408459a2a45982b9cd70fd-image.png),![image.png](https://pic.leetcode-cn.com/0cfddec2d15ed9a56c434f470ff07eb3dfc83dccbda0160583d1bce469077274-image.png)>
+```C++ [solution 1]
+class Solution {
+private:
+  void dfs(vector<vector<char>>& grid, int r, int c) {
+    int nr = grid.size();
+    int nc = grid[0].size();
+
+    grid[r][c] = '0';
+    if (r - 1 >= 0 && grid[r-1][c] == '1') dfs(grid, r - 1, c);
+    if (r + 1 < nr && grid[r+1][c] == '1') dfs(grid, r + 1, c);
+    if (c - 1 >= 0 && grid[r][c-1] == '1') dfs(grid, r, c - 1);
+    if (c + 1 < nc && grid[r][c+1] == '1') dfs(grid, r, c + 1);
+  }
+
+public:
+  int numIslands(vector<vector<char>>& grid) {
+    int nr = grid.size();
+    if (!nr) return 0;
+    int nc = grid[0].size();
+
+    int num_islands = 0;
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          ++num_islands;
+          dfs(grid, r, c);
+        }
+      }
+    }
+
+    return num_islands;
+  }
+};
+```
+
+```Java [solution 1]
+class Solution {
+  void dfs(char[][] grid, int r, int c) {
+    int nr = grid.length;
+    int nc = grid[0].length;
+
+    if (r < 0 || c < 0 || r >= nr || c >= nc || grid[r][c] == '0') {
+      return;
+    }
+
+    grid[r][c] = '0';
+    dfs(grid, r - 1, c);
+    dfs(grid, r + 1, c);
+    dfs(grid, r, c - 1);
+    dfs(grid, r, c + 1);
+  }
+
+  public int numIslands(char[][] grid) {
+    if (grid == null || grid.length == 0) {
+      return 0;
+    }
+
+    int nr = grid.length;
+    int nc = grid[0].length;
+    int num_islands = 0;
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          ++num_islands;
+          dfs(grid, r, c);
+        }
+      }
+    }
+
+    return num_islands;
+  }
+}
+```
+
+
+**复杂度分析**
+
+* 时间复杂度 : $O(M\times N)$，其中 $M$ 和 $N$ 分别为行数和列数。
+
+* 空间复杂度 : 最坏情况下为 $O(M \times N)$，此时整个网格均为陆地，深度优先搜索的深度达到 $M \times N$。
+
+---
+
+
+#### 方法二: 广度优先搜索 【通过】
+
+**算法**
+
+线性扫描整个二维网格，如果一个结点包含 `1`，则以其为根结点启动广度优先搜索。将其放入队列中，并将值设为 `0` 以标记访问过该结点。迭代地搜索队列中的每个结点，直到队列为空。
+
+```C++ [solution 2]
+class Solution {
+public:
+  int numIslands(vector<vector<char>>& grid) {
+    int nr = grid.size();
+    if (!nr) return 0;
+    int nc = grid[0].size();
+
+    int num_islands = 0;
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          ++num_islands;
+          grid[r][c] = '0'; // mark as visited
+          queue<pair<int, int>> nei***ors;
+          nei***ors.push({r, c});
+          while (!nei***ors.empty()) {
+            auto rc = nei***ors.front();
+            nei***ors.pop();
+            int row = rc.first, col = rc.second;
+            if (row - 1 >= 0 && grid[row-1][col] == '1') {
+              nei***ors.push({row-1, col}); grid[row-1][col] = '0';
+            }
+            if (row + 1 < nr && grid[row+1][col] == '1') {
+              nei***ors.push({row+1, col}); grid[row+1][col] = '0';
+            }
+            if (col - 1 >= 0 && grid[row][col-1] == '1') {
+              nei***ors.push({row, col-1}); grid[row][col-1] = '0';
+            }
+            if (col + 1 < nc && grid[row][col+1] == '1') {
+              nei***ors.push({row, col+1}); grid[row][col+1] = '0';
+            }
+          }
+        }
+      }
+    }
+
+    return num_islands;
+  }
+};
+```
+
+```Java [solution 2]
+class Solution {
+  public int numIslands(char[][] grid) {
+    if (grid == null || grid.length == 0) {
+      return 0;
+    }
+
+    int nr = grid.length;
+    int nc = grid[0].length;
+    int num_islands = 0;
+
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          ++num_islands;
+          grid[r][c] = '0'; // mark as visited
+          Queue<Integer> nei***ors = new LinkedList<>();
+          nei***ors.add(r * nc + c);
+          while (!nei***ors.isEmpty()) {
+            int id = nei***ors.remove();
+            int row = id / nc;
+            int col = id % nc;
+            if (row - 1 >= 0 && grid[row-1][col] == '1') {
+              nei***ors.add((row-1) * nc + col);
+              grid[row-1][col] = '0';
+            }
+            if (row + 1 < nr && grid[row+1][col] == '1') {
+              nei***ors.add((row+1) * nc + col);
+              grid[row+1][col] = '0';
+            }
+            if (col - 1 >= 0 && grid[row][col-1] == '1') {
+              nei***ors.add(row * nc + col-1);
+              grid[row][col-1] = '0';
+            }
+            if (col + 1 < nc && grid[row][col+1] == '1') {
+              nei***ors.add(row * nc + col+1);
+              grid[row][col+1] = '0';
+            }
+          }
+        }
+      }
+    }
+
+    return num_islands;
+  }
+}
+```
+
+**复杂度分析**
+* 时间复杂度 : $O(M \times N)$，其中 $M$ 和 $N$ 分别为行数和列数。
+
+* 空间复杂度 : $O(min(M, N))$，在最坏的情况下（全部为陆地），队列的大小可以达到 min($M，N$)。
+
+---
+
+
+#### 方法三：并查集 【通过】
+
+**算法**
+
+遍历二维网格，将竖直或水平相邻的陆地联结。最终，返回并查集数据结构中相连部分的数量。
+
+下面的动画展示了整个算法。
+
+<![image.png](https://pic.leetcode-cn.com/41b6ce1794ba80a7a82b31dc4c0642b26ccd280457d254d2fdad37a1f5a73ca6-image.png),![image.png](https://pic.leetcode-cn.com/82fa6f7b52294fdd8a2f4a0a28d4ca2dd3d71e86e7ddf5fa5ef4b18a13d3c438-image.png),![image.png](https://pic.leetcode-cn.com/773a3ac931ca2b397b0ba6cac17a15a0dd21fe2d0f2887d6b90405d9025c3f85-image.png),![image.png](https://pic.leetcode-cn.com/6c1a18d84a24f74c18654e0f20b17c263646a9fad911e6bb227e665688abb037-image.png),![image.png](https://pic.leetcode-cn.com/1a35068b177ce3ed70de37d3e7a1fb3e91ba0e5588ab3e3633ddb963f3d64f68-image.png),![image.png](https://pic.leetcode-cn.com/6f35cbfc7410e54ec80f96af3123c5eed5e5b8f73e6a1cc2fa4aea0f911e919c-image.png)>
+
+
+```C++ [solution 3]
+class UnionFind {
+public:
+  UnionFind(vector<vector<char>>& grid) {
+    count = 0;
+    int m = grid.size();
+    int n = grid[0].size();
+      for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (grid[i][j] == '1') {
+            parent.push_back(i * n + j);
+            ++count;
+          }
+          else parent.push_back(-1);
+          rank.push_back(0);
+        }
+    }
+  }
+
+  int find(int i) { // path compression
+    if (parent[i] != i) parent[i] = find(parent[i]);
+    return parent[i];
+  }
+
+  void Union(int x, int y) { // union with rank
+    int rootx = find(x);
+    int rooty = find(y);
+    if (rootx != rooty) {
+      if (rank[rootx] > rank[rooty]) parent[rooty] = rootx;
+      else if (rank[rootx] < rank[rooty]) parent[rootx] = rooty;
+      else {
+        parent[rooty] = rootx; rank[rootx] += 1;
+      }
+      --count;
+    }
+  }
+
+  int getCount() const {
+    return count;
+  }
+
+private:
+  vector<int> parent;
+  vector<int> rank;
+  int count; // # of connected components
+};
+
+class Solution {
+public:
+  int numIslands(vector<vector<char>>& grid) {
+    int nr = grid.size();
+    if (!nr) return 0;
+    int nc = grid[0].size();
+
+    UnionFind uf (grid);
+    int num_islands = 0;
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          grid[r][c] = '0';
+          if (r - 1 >= 0 && grid[r-1][c] == '1') uf.Union(r * nc + c, (r-1) * nc + c);
+          if (r + 1 < nr && grid[r+1][c] == '1') uf.Union(r * nc + c, (r+1) * nc + c);
+          if (c - 1 >= 0 && grid[r][c-1] == '1') uf.Union(r * nc + c, r * nc + c - 1);
+          if (c + 1 < nc && grid[r][c+1] == '1') uf.Union(r * nc + c, r * nc + c + 1);
+        }
+      }
+    }
+
+    return uf.getCount();
+  }
+};
+```
+
+```Java [solution 3]
+class Solution {
+  class UnionFind {
+    int count; // # of connected components
+    int[] parent;
+    int[] rank;
+
+    public UnionFind(char[][] grid) { // for problem 200
+      count = 0;
+      int m = grid.length;
+      int n = grid[0].length;
+      parent = new int[m * n];
+      rank = new int[m * n];
+      for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+          if (grid[i][j] == '1') {
+            parent[i * n + j] = i * n + j;
+            ++count;
+          }
+          rank[i * n + j] = 0;
+        }
+      }
+    }
+
+    public int find(int i) { // path compression
+      if (parent[i] != i) parent[i] = find(parent[i]);
+      return parent[i];
+    }
+
+    public void union(int x, int y) { // union with rank
+      int rootx = find(x);
+      int rooty = find(y);
+      if (rootx != rooty) {
+        if (rank[rootx] > rank[rooty]) {
+          parent[rooty] = rootx;
+        } else if (rank[rootx] < rank[rooty]) {
+          parent[rootx] = rooty;
+        } else {
+          parent[rooty] = rootx; rank[rootx] += 1;
+        }
+        --count;
+      }
+    }
+
+    public int getCount() {
+      return count;
+    }
+  }
+
+  public int numIslands(char[][] grid) {
+    if (grid == null || grid.length == 0) {
+      return 0;
+    }
+
+    int nr = grid.length;
+    int nc = grid[0].length;
+    int num_islands = 0;
+    UnionFind uf = new UnionFind(grid);
+    for (int r = 0; r < nr; ++r) {
+      for (int c = 0; c < nc; ++c) {
+        if (grid[r][c] == '1') {
+          grid[r][c] = '0';
+          if (r - 1 >= 0 && grid[r-1][c] == '1') {
+            uf.union(r * nc + c, (r-1) * nc + c);
+          }
+          if (r + 1 < nr && grid[r+1][c] == '1') {
+            uf.union(r * nc + c, (r+1) * nc + c);
+          }
+          if (c - 1 >= 0 && grid[r][c-1] == '1') {
+            uf.union(r * nc + c, r * nc + c - 1);
+          }
+          if (c + 1 < nc && grid[r][c+1] == '1') {
+            uf.union(r * nc + c, r * nc + c + 1);
+          }
+        }
+      }
+    }
+
+    return uf.getCount();
+  }
+}
+```
+
+**复杂度分析**
+
+* 时间复杂度：$O(M \times N)$，其中 $M$ 和 $N$ 分别为行数和列数。注意当使用路径压缩和排名结合并实现并查集时，并操作只需要消耗常数时间。
+
+* 空间复杂度：$O(M \times N)$，这是并查集数据结构需要的空间。
+

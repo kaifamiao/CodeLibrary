@@ -1,0 +1,15 @@
+```
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return solve(0, nums.length-1, nums);
+    }
+    
+    private TreeNode solve(int l, int r, int[] arr){
+        if(l > r) return null;
+        
+        int mid = (l+r) >> 1;
+        TreeNode node = new TreeNode(arr[mid]);
+        node.left = solve(l, mid-1, arr);
+        node.right = solve(mid+1, r, arr);
+        return node;
+    }
+```

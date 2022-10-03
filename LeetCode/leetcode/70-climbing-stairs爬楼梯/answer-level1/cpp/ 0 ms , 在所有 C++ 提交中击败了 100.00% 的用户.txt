@@ -1,0 +1,24 @@
+### 解题思路
+记录上一次和上上次结果
+
+### 代码
+
+```cpp
+class Solution {
+public:
+    int climbStairs(int n) {
+        if(n == 1) return 1;
+        if(n == 2) return 2;
+        // return climbStairs(n-1) + climbStairs(n-2);
+        int pre = 2, prepre = 1, res = 0, i = 3;
+        while( i<=n ) {
+            res = pre + prepre;
+            prepre = pre;
+            pre = res;
+            i++;
+        }
+        return res;
+    }
+
+};
+```
