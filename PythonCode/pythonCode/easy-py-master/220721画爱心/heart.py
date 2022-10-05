@@ -1,0 +1,11 @@
+import turtle
+turtle.color('pink')
+turtle.setheading(50)
+turtle.begin_fill()
+turtle.circle(-100, 170)
+turtle.circle(-300, 40)
+turtle.right(38)
+turtle.circle(-300, 40)
+turtle.circle(-100, 170)
+turtle.end_fill()
+turtle.done()
