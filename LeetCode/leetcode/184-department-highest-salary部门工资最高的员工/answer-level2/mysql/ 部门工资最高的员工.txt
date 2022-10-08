@@ -1,9 +1,0 @@
-### 解题思路
-分组查询出最高的工资，然后再在各组中筛选出符合条件的记录
-
-### 代码
-
-```mysql
-# Write your MySQL query statement below
-select d.Name as Department,e.Name as Employee,e.Salary from Employee e join Department d on e.DepartmentId=d.Id where (Salary,e.DepartmentId) in (select max(Salary),DepartmentId as Salary from Employee group by DepartmentId);
-```

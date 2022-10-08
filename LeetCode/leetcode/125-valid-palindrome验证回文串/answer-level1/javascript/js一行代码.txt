@@ -1,1 +1,0 @@
-str.replace(/\W/g, '').toLowerCase().split('').reverse().join('') === str.replace(/\W/g, '').toLowerCase()

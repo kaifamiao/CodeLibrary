@@ -1,1 +1,0 @@
-select FirstName, LastName, City, State from person p left join Address a on p. PersonId = a. PersonId    

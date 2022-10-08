@@ -1,6 +1,0 @@
-1. 两个数字相等异或为0
-2. 异或满足交换律
-
-```
-var singleNumber = nums => nums.reduce((p, c) => p ^ c)
-```
