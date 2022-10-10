@@ -9,18 +9,31 @@
         crossorigin="anonymous">
     <script src="https://cdn.staticfile.org/vue/3.0.5/vue.global.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
 
-    <style scoped>
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            text-align: center;
+        }
+
         .top-box {
             width: 100%;
             height: 350px;
-            background-color: white;
+            background-color: #fff;
         }
 
         .card-box {
             width: 350px;
             height: 100%;
-            background-color: darkgray;
+            background-color: slategray;
             margin: 0 auto;
             position: relative;
         }
@@ -37,13 +50,13 @@
             background-color: #fff;
         }
 
-
-
         .selected-card-box {
             width: 350px;
             height: 50px;
-            background-color: deepskyblue;
+            background-color: #fff;
             margin: 0 auto;
+            border: 1px solid #005500;
+
         }
 
         .selected-card {
@@ -51,7 +64,7 @@
             height: 48px;
             line-height: 48px;
             font-size: 36px;
-            border: 1px solid #666;
+            border: 1px solid #000000;
             text-align: center;
             background-color: #fff;
             display: inline-block;
@@ -64,13 +77,10 @@
             margin-top: 24px;
         }
 
-        h1 {
-            text-align: center;
-        }
-
         .A {
             background-color: #005500;
-            color: #fff;
+            color:#00007f;
+            width:50px;
         }
 
         .B {
@@ -141,61 +151,73 @@
             timer = setInterval(autoPlay, 1);//用定时器触发autoplay自动播放
         }
     </script>
-
-
-    <h1>喵了个喵</h1>
     <div id="miao-vue" class="demo">
+        <h1> {{message}}</h1>
+        <p></p>
+        <!-- <h2>{{getNowDate()}}</h2> -->
+        <hr>
         <div class="box">
-            <!-- 上 -->
             <div class="top-box">
                 <div class="card-box">
                     <div class="card" @click="selectedCard(item, index, $event)" v-for="(item, index) in allCardList"
                         :key="index" :style="{left: item.left, top: item.top}">
-                        <i :class="item.icon">{{item.icon}}</i>
+                        <i :class="item.icon"></i>
                     </div>
                 </div>
             </div>
-            
+            <p>剩余：{{allCardList.length}}</p>
             <div class="selected-card-box">
                 <div class="selected-card" v-for="(item, index) in selectedCardList" :key="index">
-                    <i>{{item.icon}}</i>
+                    <i :class="item.icon"></i>
                 </div>
             </div>
+
             <div class="btn">
-                <button type="button" class="btn btn-primary btn-lg btn-block btn-success" @click="initData()"
-                    type="primary">重新开始</button>
-                <button type="button" class="btn btn-primary btn-lg btn-block" @click="backCard()"
-                    type="primary">撤回</button>
+                <button @click="backCard()" type="primary"
+                    class="btn btn-primary btn-lg btn-block btn-success">撤回</button>
+                <button @click="initData()" type="primary" class="btn btn-primary btn-lg btn-block">刷新/重新开始</button>
+
             </div>
         </div>
 
-
-
-
     </div>
+
 </body>
 <script>
-    const HelloVueApp = {
+    const MiaoVueApp = {
         data() {
             return {
-                positionList: [],
-                allCardList: [],
-                selectedCardList: [],
-                currentSelectedCard: {},
-                selectHistory: [],
+                message: '喵了个喵',
+                M: 7,
+                cardNum: 100,
+                positionList: [],  //  定位数组
+                allCardList: [],  // 所有待选择的卡片list
+                selectedCardList: [],  // 已选择的卡片list
+                currentSelectedCard: {},  // 当前选中的卡片
+                selectHistory: [],  // 记录已选择的卡片list，方便撤回操作
                 iconList: [
-                    { picIndex: 0, icon: 'A' },
-                    { picIndex: 1, icon: 'B' },
-                    { picIndex: 2, icon: 'C' },
-                    { picIndex: 3, icon: 'D' },
-                    { picIndex: 4, icon: 'E' },
-                    { picIndex: 5, icon: 'F' },
-                    { picIndex: 6, icon: 'G' },
-                    { picIndex: 7, icon: 'H' },
-                    { picIndex: 8, icon: 'I' },
-                    { picIndex: 9, icon: 'J' },
-                    { picIndex: 10, icon: 'K' }
-                ],
+                    { picIndex: 0, icon: 'bi bi-twitter primary' },
+                    { picIndex: 1, icon: 'bi bi-umbrella' },
+                    { picIndex: 2, icon: 'bi bi-trophy' },
+                    { picIndex: 3, icon: 'bi bi-watch' },
+                    { picIndex: 4, icon: 'bi bi-yin-yang' },
+                    { picIndex: 5, icon: 'bi bi-truck' },
+                    { picIndex: 6, icon: 'bi bi-cursor-fill' },
+                    { picIndex: 7, icon: 'bi bi-star' },
+                    { picIndex: 8, icon: 'bi bi-heart-pulse-fill' },
+                    { picIndex: 9, icon: 'bi bi-gem' },
+                    { picIndex: 10, icon: 'bi bi-emoji-heart-eyes-fill' }
+                    // { picIndex: 11, icon: 'L' },
+                    // { picIndex: 12, icon: 'M' },
+                    // { picIndex: 13, icon: 'N' },
+                    // { picIndex: 14, icon: 'O' },
+                    // { picIndex: 15, icon: 'P' },
+                    // { picIndex: 16, icon: 'Q' },
+                    // { picIndex: 17, icon: 'R' },
+                    // { picIndex: 18, icon: 'S' },
+                    // { picIndex: 19, icon: 'T' },
+                    // { picIndex: 20, icon: 'U' }
+                ],  // 图标类型数组
             }
         },
         created() {
@@ -223,7 +245,6 @@
                 }
 
             },
-            // 选择卡片
             selectedCard(item, index, event) {
                 console.log(item, index, event.srcElement);
                 let isHover = this.hasOverLayer(event.srcElement)
@@ -237,7 +258,6 @@
                         return a.picIndex - b.picIndex
                     })
                     setTimeout(() => {
-                        // 判断是否可以消除
                         this.checkRemove()
                         if (this.allCardList.length == 0) {
                             alert('你赢了！')
@@ -246,7 +266,7 @@
                             alert('你输了！')
                             this.initData()
                         }
-                    }, 200)
+                    }, 500)
                 }
 
             },
@@ -270,7 +290,7 @@
             // 监测元素是否被覆盖
             hasOverLayer(element) {
                 let document = element.ownerDocument,
-                    rect = element.getBoundingClientRect(), // 获取目标的矩形信息
+                    rect = element.getBoundingClientRect(),
                     x = rect.x,
                     y = rect.y,
                     width = rect.width,
@@ -301,8 +321,8 @@
                 // 第一层
                 let left = 0
                 let top = 0
-                for (let i = 0; i < 7; i++) {
-                    for (let j = 0; j < 7; j++) {
+                for (let i = 0; i < this.M; i++) {
+                    for (let j = 0; j < this.M; j++) {
                         this.positionList.push({ id: index++, picIndex: 1, icon: 'A', left: left + 'px', top: top + 'px' })
                         left += 50
                     }
@@ -313,23 +333,25 @@
                 // 第二层
                 left = 25
                 top = 25
-                for (let i = 0; i < 6; i++) {
-                    for (let j = 0; j < 6; j++) {
+                for (let i = 0; i < this.M - 1; i++) {
+                    for (let j = 0; j < this.M - 1; j++) {
                         this.positionList.push({ id: index++, picIndex: 1, icon: 'A', left: left + 'px', top: top + 'px' })
                         left += 50
                     }
                     left = 25
                     top += 50
                 }
+
+                // 生成随机图标
                 this.createIcon()
             },
-            // 生成随机数字
+            // 生成随机图标
             createIcon() {
                 let index = 0
                 this.allCardList = []
                 let random = 0
                 console.log(random);
-                for (let i = 0; i < 303; i++) {
+                for (let i = 0; i < this.cardNum; i++) {
                     if (i % 3 == 0) {
                         random = Math.floor(Math.random() * 11)
                     }
@@ -346,25 +368,50 @@
                     item.id = index
                 })
 
-
-                // 循环堆叠
+                let M = this.M
+                M = M * M + (M - 1) * (M - 1)
+                // 随机位置
+                console.log(M)
                 let pos = 0
                 this.allCardList.forEach(item => {
+                    pos = Math.floor(Math.random() * M)
                     item['left'] = this.positionList[pos].left
                     item['top'] = this.positionList[pos].top
-                    pos++
-                    if (pos > 84) {
-                        pos = 0
-                    }
                 })
+
+                // 循环堆叠
+                // let pos = 0
+
+                // 
+                // this.allCardList.forEach(item => {
+                //     item['left'] = this.positionList[pos].left
+                //     item['top'] = this.positionList[pos].top
+                //     pos++
+
+                //     if (pos > (M-1)) {
+                //         pos = 0
+                //     }
+                // })
 
                 console.log(this.allCardList);
 
+            },
+
+            getNowDate() {
+                const timeOne = new Date()
+                const year = timeOne.getFullYear()
+                let month = timeOne.getMonth() + 1
+                let day = timeOne.getDate()
+                month = month < 10 ? '0' + month : month
+                day = day < 10 ? '0' + day : day
+                const NOW_MONTHS_AGO = `${year}-${month}-${day}`
+                return NOW_MONTHS_AGO
             }
+
 
         }
     }
-    Vue.createApp(HelloVueApp).mount('#miao-vue')
+    Vue.createApp(MiaoVueApp).mount('#miao-vue')
 </script>
 
 
