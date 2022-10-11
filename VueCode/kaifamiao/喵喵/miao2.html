@@ -189,7 +189,7 @@
             return {
                 message: '喵了个喵',
                 M: 7,
-                cardNum: 100,
+                cardNum: 200,
                 positionList: [],  //  定位数组
                 allCardList: [],  // 所有待选择的卡片list
                 selectedCardList: [],  // 已选择的卡片list
@@ -372,26 +372,26 @@
                 M = M * M + (M - 1) * (M - 1)
                 // 随机位置
                 console.log(M)
-                let pos = 0
-                this.allCardList.forEach(item => {
-                    pos = Math.floor(Math.random() * M)
-                    item['left'] = this.positionList[pos].left
-                    item['top'] = this.positionList[pos].top
-                })
-
-                // 循环堆叠
                 // let pos = 0
-
-                // 
                 // this.allCardList.forEach(item => {
+                //     pos = Math.floor(Math.random() * M)
                 //     item['left'] = this.positionList[pos].left
                 //     item['top'] = this.positionList[pos].top
-                //     pos++
-
-                //     if (pos > (M-1)) {
-                //         pos = 0
-                //     }
                 // })
+
+                // 循环堆叠
+                let pos = 0
+
+                
+                this.allCardList.forEach(item => {
+                    item['left'] = this.positionList[pos].left
+                    item['top'] = this.positionList[pos].top
+                    pos++
+
+                    if (pos > (M-1)) {
+                        pos = 0
+                    }
+                })
 
                 console.log(this.allCardList);
 
