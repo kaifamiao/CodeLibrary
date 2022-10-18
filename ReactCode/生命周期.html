@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="../favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Count extends React.Component {
+            constructor(props){
+                super(props)
+                this.state={
+                    count : 0
+                }
+                console.log('Count------constructor');
+            }
+
+            add = () => {
+                const {count} = this.state
+                this.setState({
+                    count : count + 1
+                })
+            }
+
+            force = () => {
+                this.forceUpdate()
+            }
+
+            destory = () => {
+                ReactDOM.unmountComponentAtNode(document.getElementById('root'))
+            }
+
+            // 若 state 的值在任何时候都取决于 props。
+            static getDerivedStateFromProps(props,state){
+                console.log('Count------getDerivedStateFromProps',props,state);
+                return null
+            }
+
+            // render 之后，渲染完毕之后，初始化完成
+            componentDidMount(){
+                console.log('Count------componentDidMount');
+                // state 初始化 添加定时器
+            }
+
+            // render 之前，返回值 true 和 false
+            shouldComponentUpdate(){
+                console.log('Count------shouldComponentUpdate');
+                return true
+            }
+
+            getSnapshotBeforeUpdate(){
+                console.log('Count------getSnapshotBeforeUpdate');
+                return "kaifamiao"
+            }
+
+            // 更新完成
+            componentDidUpdate(preprops,prestate,snapshot){
+                console.log('Count------componentDidUpdate',preprops,prestate,snapshot);
+            }
+
+            // 销毁组件之前
+            componentWillUnmount(){
+                console.log('Count------componentWillUnmount');
+            }
+
+            render(){
+                console.log('Count------render');
+                return (
+                    <div>
+                        <h1>当前的数字:{this.state.count}</h1>
+                        <button onClick={this.add}>点击+1</button>
+                        <button onClick={this.force}>强制更新</button>
+                        <button onClick={this.destory}>销毁组件</button>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Count name="kaifamiao"/>,document.getElementById('root'))
+    </script>
+</body>
+</html>
